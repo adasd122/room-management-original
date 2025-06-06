@@ -44,11 +44,13 @@ const Settings: React.FC = () => {
   const handleSaveSettings = () => {
     // Update mess settings
     updateMessFee(messSettings);
+    localStorage.setItem('messFee', JSON.stringify(messSettings));
     
     // Update room settings
     roomSettings.forEach(room => {
       updateRoom(room);
     });
+    localStorage.setItem('rooms', JSON.stringify(roomSettings));
     
     // Show success message
     setSaveSuccess(true);
