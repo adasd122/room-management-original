@@ -54,20 +54,22 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [residents, setResidents] = useState<Resident[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
-  const [rooms, setRooms] = useState<Room[]>(defaultRooms);
-  const [messFee, setMessFee] = useState<MessFee>(defaultMessFee);
+  const [rooms, setRooms] = useState<Room[]>(() => {
+    const savedRooms = localStorage.getItem('rooms');
+    return savedRooms ? JSON.parse(savedRooms) : defaultRooms;
+  });
+  const [messFee, setMessFee] = useState<MessFee>(() => {
+    const savedMessFee = localStorage.getItem('messFee');
+    return savedMessFee ? JSON.parse(savedMessFee) : defaultMessFee;
+  });
 
   // Load data from localStorage on initial render
   useEffect(() => {
     const loadedResidents = localStorage.getItem('residents');
     const loadedPayments = localStorage.getItem('payments');
-    const loadedRooms = localStorage.getItem('rooms');
-    const loadedMessFee = localStorage.getItem('messFee');
-
+    
     if (loadedResidents) setResidents(JSON.parse(loadedResidents));
     if (loadedPayments) setPayments(JSON.parse(loadedPayments));
-    if (loadedRooms) setRooms(JSON.parse(loadedRooms));
-    if (loadedMessFee) setMessFee(JSON.parse(loadedMessFee));
   }, []);
 
   // Save data to localStorage whenever it changes
@@ -183,7 +185,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   const updateRoom = (room: Room) => {
-    setRooms(rooms.map(r => (r.id === room.id ? room : r)));
+    setRooms(prevRooms => prevRooms.map(r => (r.id === room.id ? room : r)));
   };
 
   const updateMessFee = (fee: MessFee) => {
