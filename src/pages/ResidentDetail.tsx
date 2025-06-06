@@ -14,7 +14,8 @@ import {
   Trash2,
   Download,
   Plus,
-  X
+  X,
+  Save
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Payment, PaymentStatus } from '../types';
